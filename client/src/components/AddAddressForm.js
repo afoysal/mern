@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import '../css/Login.css'; 
+import '../css/Login.css';
 //import axios from 'axios';
 //import Auth from '../services/Auth'
+import { connect } from 'react-redux';
 
 class AddAddressForm extends Component {
+	state = { errors: '' }
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.erroraddAddress !== this.props.erroraddAddress) {
+			this.setState({ errors: nextProps.erroraddAddress  });
+		}
+		if (nextProps.errors !== this.props.errors) {
+			this.setState({ errors: nextProps.errors });
+		}
+	}
 	render() {
 		return (
 			<form className="ui form">
-				{ this.props.errors.length > 0 ? <div className="ui red message">
-                    <ul>
-                        {this.props.errors}
-                    </ul>
-                </div> : null}
+				{ this.state.errors ? <div className="ui red message">
+					{ this.state.errors }
+				</div> : null }
 				<table className="ui attached compact celled striped selectable table">
 					<tbody>
 			            <tr>
@@ -42,8 +50,8 @@ class AddAddressForm extends Component {
 			                <td className="ui header">Photo</td>
 			                <td>
 			                   	<div>
-			                   		{this.props.image_element()} 
-			                   	</div> 
+			                   		{this.props.image_element()}
+			                   	</div>
 			                </td>
 			            </tr>
 		            </tbody>
@@ -52,4 +60,9 @@ class AddAddressForm extends Component {
 		);
 	}
 }
-export default AddAddressForm; 
+
+const mapStateToProps = state => ({
+	erroraddAddress: state.addressReducer.erroraddAddress
+});
+
+export default connect(mapStateToProps)(AddAddressForm);

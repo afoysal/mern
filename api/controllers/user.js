@@ -7,7 +7,7 @@ const { serverError, resourceError } = require('../util/error');
 
 const register = (req, res, next) => {
     let { name, email, password, confirmPassword } = req.body
-        let validate = registerValidator({ name, email, password, confirmPassword });
+    let validate = registerValidator({ name, email, password, confirmPassword });
 
     if (!validate.isValid) {
         res.status(400).json(validate.error);
@@ -80,7 +80,7 @@ const login = (req, res, next) => {
                     }
 
                     if (result) {
-                        let token = jwt.sign( { email: user.email, _id: user._id }, 'SECRET', { expiresIn: '2h' } )
+                        let token = jwt.sign({ email: user.email, _id: user._id, user_name : user.name }, 'SECRET', { expiresIn: '2h' } )
                         res.status(200).json({
                             message: 'Login Successful',
                             token: `Bearer ${token}`

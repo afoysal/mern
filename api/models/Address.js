@@ -11,28 +11,28 @@ const AddressSchema = new Schema({
     address: {
         type: String,
         trim: true,
-        required: true,
-        minlength: 3
+        //required: true,
+        //minlength: 3
     },
     telephone_no: {
         type: String,
         trim: true,
-        required: true,
-        minlength: 3
-    },
-    image: {
-        type: String,
-        trim: true,
-        required: true,
-        minlength: 3
+        //required: true,
+        //minlength: 3
     },
     email: {
         type: String,
         trim: true,
-        required: true,
-        minlength: 3,
+        //required: true,
+        //minlength: 3,
         unique: true
-    }
+    },
+    image: {
+        type: String,
+        trim: true,
+        //required: true,
+        //minlength: 3
+    },
 });
 const Address = mongoose.model('Address', AddressSchema);
 module.exports = Address;

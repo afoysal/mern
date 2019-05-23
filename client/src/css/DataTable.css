@@ -30,6 +30,7 @@ h1 {
     cursor:pointer;
     margin-right: 30px;
     text-decoration: underline;
+    margin-left: 4px;
 }
 .extra {
     width: 200px;
@@ -50,4 +51,8 @@ h1 {
 
 .new_address {
     margin-bottom: 20px;
+}
+
+.ui.red.message {
+    text-align: center !important;
 }

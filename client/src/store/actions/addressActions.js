@@ -1,25 +1,87 @@
 import Axios from 'axios';
+import get from 'lodash/get';
 
-export const getAddress = () => dispatch => {
-    //Axios.get('/api/users/addresses?page=' + this.state.page )
-  return Axios.get('/api/address')
+Axios.interceptors.response.use(
+  response => response,
+  error => {
+    const err = get(error, ['response', 'data', 'err']);
+
+    return err ? Promise.reject(err) : Promise.reject(error.message);
+  },
+);
+
+export const getAddress = (page) => dispatch => {
+  return Axios.get('/api/address/page/' + page)
   .then(response => {
-    //console.log(response.data);
-    // self.setState({
-    //     result: response.data.data,
-    //     last_page: response.data.meta.last_page,
-    //     current_page: response.data.meta.current_page,
-    //     from: response.data.meta.from,
-    //     dataAvailable: true
-    // });
+    var addressData = response.data;
     dispatch({
       type: 'getAddresses',
-      payload: response.data
+      payload: addressData
     });
   })
   .catch(function(error) {
-    console.log(error);
+    dispatch({
+      type: 'getAddressesError',
+      payload: error
+    });
   });
-}
+};
 
-export default { getAddress };
+export const addAddress = value => dispatch => {
+  return Axios.post('/api/address', value)
+  .then(response => {
+    dispatch({
+      type: 'addAddress',
+      payload: response.data
+    });
+  })
+  .catch(error => {
+    //console.log(error);
+    dispatch({
+      type: 'erroraddAddress',
+      payload: error
+    });
+  });
+};
+
+export const uploadImage = (formData, config, user_id) => dispatch => {
+  return Axios.post('/api/address/upload/' + user_id, formData, config )
+  .then(response => {
+    //console.log(response);
+    dispatch({
+      type: 'uploadImage',
+      payload: response.data
+    });
+  })
+  .catch(error => {
+    //console.log(error);
+    dispatch({
+      type: 'uploadImageerror',
+      payload: error
+    });
+  });
+};
+
+export const openModal = value => dispatch => {
+  dispatch({
+    type: 'openModal',
+    payload: value
+  });
+};
+
+export const deleteImage = (image_name) => dispatch => {
+  if (image_name) {
+    return Axios.post('/api/address/cancle_image/' + image_name)
+    .then(response => {
+      dispatch({
+        type: 'deleteImage',
+        payload: response.data
+      });
+    })
+    .catch(
+      error => { console.log(error) }
+    );
+  }
+};
+
+export default { getAddress, addAddress, uploadImage, openModal };
