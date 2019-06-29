@@ -1,12 +1,8 @@
-import React, { Component } from 'react'
-import { Button, Modal } from 'semantic-ui-react'
-import ModalElement from './ModalElement'
-import Auth from '../services/Auth'
-import axios from 'axios';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import { Button, Modal } from 'semantic-ui-react';
+import ModalElement from './ModalElement';
 import { addAddress, getAddress, openModal, deleteImage } from '../store/actions/addressActions';
-import { Provider } from 'react-redux';
-import store from '../store';
+import { connect, Provider, ReactReduxContext } from 'react-redux';
 
 class ModalBody extends Component {
   state = {
@@ -23,11 +19,15 @@ class ModalBody extends Component {
   };
 
   insertAddress = () => {
+
     if (this.state.name === '') {
       this.setState({ errors: 'Atleast Name is required' });
       return false;
-    } else {
-      this.setState({ errors: '' });
+    }
+
+    if (!(this.state.email).match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
+      this.setState({ errors: 'Please enter a valid Email' });
+      return false;
     }
 
     var address_data = {
@@ -35,9 +35,9 @@ class ModalBody extends Component {
       address: this.state.address,
       telephone_no: this.state.telephone_no,
       email: this.state.email,
-      image: this.state.photo_name
+      image: this.state.photo_name,
+      owner: this.props.userData
     };
-    //console.log(address_data);
     this.props.dispatch(addAddress(address_data));
   };
 
@@ -57,6 +57,7 @@ class ModalBody extends Component {
         }
         else {
           self.props.dispatch(deleteImage(self.state.photo_name));
+
           self.props.dispatch(openModal(false));
         }
       }
@@ -71,57 +72,62 @@ class ModalBody extends Component {
     document.removeEventListener('mousedown', this.closeModal, false);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.addaddress !== this.props.addaddress) {
+  componentDidUpdate( prevProps ) {
+    if ( prevProps.addaddress !== this.props.addaddress ) {
       this.props.dispatch(openModal(false));
-      this.props.dispatch(getAddress());
+      this.props.dispatch(getAddress(this.props.page, this.props.userData));
     }
-    if (prevProps.uploadImage !== this.props.uploadImage) {
+    if ( prevProps.uploadImage !== this.props.uploadImage ) {
       this.setState({ photo_name: this.props.uploadImage.file });
     }
   }
 
   render() {
     return (
-      <Modal id="addressModal" open={this.props.controlModal} onClose={this.props.action}>
-        <Provider store={store}>
-          {this.props.addresObj ? (
-            <Modal.Header>Address Details</Modal.Header>
-          ) : (
-            <Modal.Header>Insert Address</Modal.Header>
-          )}
-          <Modal.Content>
-              <ModalElement
-                update={this.update}
-                element={this.props.addresObj}
-                errors = {this.state.errors}
-                update_state_photo={this.update_state_photo}
-                address={this.props.address}
-                action={this.props.action}
-              />
-          </Modal.Content>
+      <ReactReduxContext.Consumer>
+        {((ctx) => (
+          <Modal id="addressModal" open={this.props.controlModal} onClose={this.props.action}>
+            <Provider store={ctx.store}>
+              {this.props.addresObj ? (
+                  <Modal.Header>Address Details</Modal.Header>
+                ) : (
+                  <Modal.Header>Insert Address</Modal.Header>
+                )}
+              <Modal.Content>
+                <ModalElement
+                  update={this.update}
+                  element={this.props.addresObj}
+                  errors={this.state.errors}
+                  update_state_photo={this.update_state_photo}
+                  address={this.props.address}
+                  action={this.props.action}
+                />
+              </Modal.Content>
 
-          <Modal.Actions>
-            {this.props.addresObj ? (
-              <Button
-                positive
-                icon="checkmark"
-                labelPosition="right"
-                onClick={this.closeModal}
-                content="OK"
-              />
-            ) : (
-              <Button
-                positive
-                icon="checkmark"
-                labelPosition="right"
-                onClick={this.insertAddress}
-                content="Save"
-              />
-            )}
-          </Modal.Actions>
-        </Provider>
-      </Modal>
+              <Modal.Actions>
+                {this.props.addresObj ? (
+                  <Button
+                    positive
+                    icon="checkmark"
+                    labelPosition="right"
+                    onClick={this.closeModal}
+                    content="OK"
+                  />
+                ) : (
+                  <Button
+                    positive
+                    icon="checkmark"
+                    labelPosition="right"
+                    onClick={this.insertAddress}
+                    content="Save"
+                  />
+                )}
+              </Modal.Actions>
+            </Provider>
+          </Modal>
+        ))
+        }
+      </ReactReduxContext.Consumer>
     );
   }
 }
@@ -129,7 +135,9 @@ class ModalBody extends Component {
 const mapStateToProps = state => ({
   controlModal: state.addressReducer.controlModal,
   addaddress: state.addressReducer.addaddress,
-  uploadImage: state.addressReducer.uploadImage
+  uploadImage: state.addressReducer.uploadImage,
+  userData: state.authReducer.result._id,
+  page: state.addressReducer.address.page,
 });
 
 export default connect(mapStateToProps)(ModalBody);

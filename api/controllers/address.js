@@ -5,11 +5,12 @@ const path = require('path');
 const { serverError, resourceError } = require('../util/error');
 
 const getAllAddress = (req, res, next) => {
-    var perPage = 10
-    var page = parseInt(req.params.page) || 1
+    var perPage = 10;
+    var page = parseInt(req.params.page) || 1;
+    var user_id = req.params.user_id;
 
     Address
-    .find({})
+    .find({ owner: user_id })
     .skip((perPage * page) - perPage)
     .limit(perPage)
     .sort({ _id: -1 })
@@ -149,19 +150,7 @@ const uploadImage = (req, res, next) => {
 
     upload(req, res, function(error) {
         if (error) {
-
-            // if (error instanceof multer.MulterError) {
-            //     //return res.status(404).json({ err: error.toString() });
-            // } else if (error) {
-
-            //let error = error.toString();
-            //error = error.replace('Error:', '');
-
-            //console.log((error.toString()).replace('Error:', ''));
-
             return res.status(404).json({ err: (error.toString()).replace('Error:', '').replace('Multer', '') });
-
-           // }
         } else {
             if (req.file.filename === res.req.res.req.file.filename) {
                 if (user_id !== '') {
@@ -194,7 +183,7 @@ const cancleImage = ( req, res, next ) => {
 
     fs.unlink(path.join('uploads/' + fileName), err => {
         if (err) {
-            console.log(err);
+            //console.log(err);
             res.send({ status: 200 });
         } else {
             if (user_id) {

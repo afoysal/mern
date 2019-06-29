@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-//import Auth from '../services/Auth'
 import { connect } from 'react-redux';
-//import { Router, Route, Link, IndexRoute, hashHistory, browserHistory, Redirect } from 'react-router-dom'
-//import { Route, Redirect } from 'react-router'
-//import Dashboard from 'Dashboard.js';
 import { NavLink } from "react-router-dom";
-//import Axios from 'axios';
 import { login } from '../store/actions/authActions';
 
 class Login extends Component {

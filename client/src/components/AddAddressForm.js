@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import '../css/Login.css';
-//import axios from 'axios';
-//import Auth from '../services/Auth'
 import { connect } from 'react-redux';
 
 class AddAddressForm extends Component {

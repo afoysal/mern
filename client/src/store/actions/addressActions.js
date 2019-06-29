@@ -5,13 +5,12 @@ Axios.interceptors.response.use(
   response => response,
   error => {
     const err = get(error, ['response', 'data', 'err']);
-
     return err ? Promise.reject(err) : Promise.reject(error.message);
   },
 );
 
-export const getAddress = (page) => dispatch => {
-  return Axios.get('/api/address/page/' + page)
+export const getAddress = (page, userID) => dispatch => {
+  return Axios.get('/api/address/page/' + page + '/user_id/' + userID)
   .then(response => {
     var addressData = response.data;
     dispatch({
@@ -36,7 +35,6 @@ export const addAddress = value => dispatch => {
     });
   })
   .catch(error => {
-    //console.log(error);
     dispatch({
       type: 'erroraddAddress',
       payload: error

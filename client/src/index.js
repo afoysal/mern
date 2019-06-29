@@ -10,7 +10,6 @@ import Auth from './services/Auth';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Register from './components/Register';
-import ModalElement from './components/ModalElement';
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import jwtDecode from 'jwt-decode';
 import setAuthToken from '../src/services/setAuthToken';
@@ -34,21 +33,21 @@ const PrivateRoute = ({ component: Component }) => (
 	/>
 );
 
-// const PrivateRoute = ({ component: Component, ...rest }) => (
-// 	<Route
-// 	  {...rest}
-// 	  	render={props =>
-// 			(Auth.isAuthenticated() ? ( <Component {...props} />) : (<Redirect to={{ pathname: '/',}}/>))
-// 	  }
-// 	/>
-// );
+const VisitorOnlyRoute = ({ component: Component }) => (
+    <Route
+        render={props =>
+            (Auth.isAuthenticated() === false? ( <Component {...props} />) : (<Redirect to={{ pathname: '/dashboard',}}/>))
+        }
+    />
+);
+
 
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route exact path="/" component={Login} />
-        <Route exact path="/register" component={Register} />
+				<VisitorOnlyRoute exact path="/" component={Login} />
+				<VisitorOnlyRoute exact path="/register" component={Register} />
         <PrivateRoute path="/dashboard" exact component={Dashboard} />
       </Switch>
     </Router>

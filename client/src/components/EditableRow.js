@@ -23,7 +23,7 @@ class EditableRow extends Component {
             var address_data = { [value]: this.state.inputValue };
             axios.put('/api/address/' + this.props.addressID, address_data)
                 .then(response => {
-                this.props.dispatch(getAddress());
+                this.props.dispatch(getAddress( this.props.page, this.props.userID ));
                 this.props.dispatch(openModal(false));
             })
             .catch(error => {
@@ -43,7 +43,7 @@ class EditableRow extends Component {
             </td>
             <td>
                 {this.props.address_element[this.props.item] ?
-                    <form className="ui form" onSubmit={this.update( this.props.item)}>
+                    <form className="ui form" onSubmit={this.update( this.props.item )}>
                         <input type="text" value={this.state.inputValue} onChange={this.get_value} />
                         <input type="submit" value="Update" className="ui positive icon button" />
                     </form> :
@@ -52,7 +52,6 @@ class EditableRow extends Component {
                             <span className="edit" onClick={ () => { this.props.makeInputBox(this.props.item) } }>Edit</span>
                         </span> :
                         <span>
-                            {/* { this.props.image_element(this.props.element) } */}
                             { this.props.image_element(this.props.element)}
                         </span>
                 }
@@ -62,6 +61,9 @@ class EditableRow extends Component {
 	}
 }
 
-export default connect()(EditableRow);
+const mapStateToProps = state => ({
+    userID: state.authReducer.result._id,
+    page: state.addressReducer.address.page,
+});
 
-//export default EditableRow;
+export default connect(mapStateToProps)(EditableRow);

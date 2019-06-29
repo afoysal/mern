@@ -81,6 +81,7 @@ class Register extends Component {
     };
     this.props.dispatch(register(data, this.props.history));
   };
+
   render() {
     return (
       <div className="ui middle aligned center aligned grid login">

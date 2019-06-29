@@ -1,34 +1,22 @@
 import React, { Component } from 'react';
-//import { withRouter } from "react-router-dom";
-// import ReactTable from "react-table";
-// import 'react-table/react-table.css'
-//import '../css/DataTable.css';
 import ModalBody from './ModalBody';
-//import { Button, Header, Icon, Modal } from 'semantic-ui-react'
-import Auth from '../services/Auth';
 import swal from 'sweetalert';
 import axios from 'axios';
-import { withRouter } from "react-router-dom";
 import { logout } from '../store/actions/authActions';
 import { getAddress, openModal } from '../store/actions/addressActions';
 import { connect } from 'react-redux';
 
 class DataTable extends Component {
-    state = {
-        modalOpen: false,
-        addressOject: null,
-        modalComponent: null,
-        userName: '',
-    };
+  state = {
+    modalOpen: false,
+    addressOject: null,
+    modalComponent: null,
+    userName: '',
+  };
 
-    getAddress = () => {
-        //this.props.dispatch(getAddress());
-        //console.log(this.props.dispatch(getAddress()));
-    }
-
-    changestate = () => {
-      this.setState({ modalOpen: !this.state.modalOpen });
-    }
+  changestate = () => {
+    this.setState({ modalOpen: !this.state.modalOpen });
+  }
 
   delete = (id, name, fileName) => {
     var myhtml = document.createElement("div");
@@ -42,7 +30,6 @@ class DataTable extends Component {
     })
     .then((willDelete) => {
       if (willDelete) {
-        var self = this;
           axios.delete(`/api/address/${id}/${fileName}`)
           .then(response => {
             swal({
@@ -51,7 +38,7 @@ class DataTable extends Component {
               icon: "success",
               timer: 4000
             });
-            this.props.dispatch(getAddress());
+            this.props.dispatch(getAddress(1,this.props.userID));
           })
           .catch(error => {
             console.log(error);
@@ -64,10 +51,8 @@ class DataTable extends Component {
       var self = this;
       axios.get('/api/address/id/' + value,)
       .then(response => {
-        //self.setState({ addressOject: response.data.address, modalOpen: true });
         self.setState({ addressOject: response.data.address});
-        this.props.dispatch(openModal(true));
-        //console.log(response.data.address);
+        self.props.dispatch(openModal(true));
       })
       .catch( error => {
         //console.log(error);
@@ -75,12 +60,11 @@ class DataTable extends Component {
     }
 
     addAddress = () => {
-        //this.setState({ addressOject: null});
-        this.changestate();
+      this.changestate();
     }
 
     componentWillMount = () => {
-      this.props.dispatch(getAddress(1));
+      this.props.dispatch(getAddress(1, this.props.userID));
       this.setState({ userName: this.props.userData });
     }
 
@@ -89,21 +73,18 @@ class DataTable extends Component {
     }
 
     openPopup = () => {
-      this.setState({ addressOject: null });
-      this.props.dispatch(openModal(true));
+      this.setState( { addressOject: null } );
+      this.props.dispatch( openModal(true) );
     }
 
     pagination = (value) => {
-      this.props.dispatch(getAddress(value));
+      this.props.dispatch(getAddress(value, this.props.userID));
     }
 
     render() {
-      if (this.props.addresses === undefined) {
-        return null;
-      }
-
-    //console.log(this.props);
-    //return false;
+    if (this.props.addresses === undefined) {
+      return null;
+    }
 
     let rows = this.props.addresses.map((item, index) => (
       <tr key={'tr' + index}>
@@ -143,89 +124,89 @@ class DataTable extends Component {
         modalComponent = <ModalBody address = {this.props.getAddress} action={() => this.changestate()} modelStatus = {this.state.modalOpen}/>;
       }
     }
+
       return (
+
         <div className="data_table">
-          <h1 className="ui attached warning message table">
-            <span id="address">Addresses</span>
-            <span id="user_details">
-              Welcome,  <b> { this.state.userName } </b>  |
-              <span id="logout" onClick={this.logout}>
-                Logout
+
+        <h1 className="ui attached warning message table">
+          <span id="address">Addresses</span>
+          <span id="user_details">
+            Welcome,  <b> { this.state.userName } </b>  |
+            <span id="logout" onClick={this.logout}> Logout </span>
+            <button className="ui teal button" onClick={this.openPopup}> <i className="plus square icon" />
+              Add Address
+            </button>
+          </span>
+        </h1>
+        {this.props.addresses.length > 0 ? (
+          <div>
+            <table className="ui attached compact celled striped selectable table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Telephone No</th>
+                  <th>Email</th>
+                  <th className="extra" />
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </table>
+            <div className="ui pagination menu">
+              <span
+                className={
+                  this.props.page === 1
+                    ? 'disabled item pagination'
+                    : 'item pagination'
+                }
+                onClick={() => {
+                  if (this.props.page === 1) {
+                    return false;
+                  }
+                  this.pagination(this.props.page - 1);
+                }}
+              >
+                ❮
               </span>
-              <button className="ui teal button" onClick={this.openPopup}>
+              <div className="item">
+                Page {this.props.page} of {this.props.maxPages}
+              </div>
+              <span
+                className={
+                  this.props.page === this.props.maxPages
+                    ? 'disabled item pagination'
+                    : 'item pagination'
+                }
+                onClick={() => {
+                  if (this.props.page === this.props.maxPages) {
+                    return false;
+                  }
+                  this.pagination(this.props.page+1);
+                }}
+              >
+                ❯
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div className="ui attached compact center aligned segment big">
+            <div className="new_address">You dont't have any Address</div>
+            <div>
+              <button
+                className="ui teal button"
+                onClick={this.openPopup}
+              >
                 <i className="plus square icon" />
                 Add Address
               </button>
-            </span>
-          </h1>
-          {this.props.addresses.length > 0 ? (
-            <div>
-              <table className="ui attached compact celled striped selectable table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Telephone No</th>
-                    <th>Email</th>
-                    <th className="extra" />
-                  </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-              </table>
-              <div className="ui pagination menu">
-                <span
-                  className={
-                    this.props.page === 1
-                      ? 'disabled item pagination'
-                      : 'item pagination'
-                  }
-                  onClick={() => {
-                    if (this.props.page === 1) {
-                      return false;
-                    }
-                    this.pagination(this.props.page - 1);
-                  }}
-                >
-                  ❮
-                </span>
-                <div className="item">
-                  Page {this.props.page} of {this.props.maxPages}
-                </div>
-                <span
-                  className={
-                    this.props.page === this.props.maxPages
-                      ? 'disabled item pagination'
-                      : 'item pagination'
-                  }
-                  onClick={() => {
-                    if (this.props.page === this.props.maxPages) {
-                      return false;
-                    }
-                    this.pagination(this.props.page+1);
-                  }}
-                >
-                  ❯
-                </span>
-              </div>
             </div>
-          ) : (
-            <div className="ui attached compact center aligned segment big">
-              <div className="new_address">You dont't have any Address</div>
-              <div>
-                <button
-                  className="ui teal button"
-                  onClick={this.openPopup}
-                >
-                  <i className="plus square icon" />
-                  Add Address
-                </button>
-              </div>
-            </div>
-          )}
-          {modalComponent}
+          </div>
+        )}
+        {modalComponent}
         </div>
-      );
-    }
+    );
+  }
 }
 
 const mapStateToProps = state => ( {
@@ -233,7 +214,8 @@ const mapStateToProps = state => ( {
     maxPages: state.addressReducer.address.maxPages,
     page: state.addressReducer.address.page,
     controlModal: state.addressReducer.controlModal,
-    userData: state.authReducer.result.user_name
+    userData: state.authReducer.result.user_name,
+    userID: state.authReducer.result._id
 } );
 
 export default connect(mapStateToProps)(DataTable);

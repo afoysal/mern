@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const valid = require('validator');
 
 const AddressSchema = new Schema({
     name: {
@@ -11,28 +12,30 @@ const AddressSchema = new Schema({
     address: {
         type: String,
         trim: true,
-        //required: true,
-        //minlength: 3
     },
     telephone_no: {
         type: String,
         trim: true,
-        //required: true,
-        //minlength: 3
     },
     email: {
         type: String,
         trim: true,
-        //required: true,
-        //minlength: 3,
-        unique: true
+        unique: true,
+        validate: {
+            validator: (v) => {
+                return valid.isEmail(v)
+            },
+            message: `{VALUE} is not an email`
+        }
     },
     image: {
         type: String,
         trim: true,
-        //required: true,
-        //minlength: 3
     },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 const Address = mongoose.model('Address', AddressSchema);
 module.exports = Address;
