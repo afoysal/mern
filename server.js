@@ -10,6 +10,7 @@ const path = require('path');
 let app = express();
 
 mongoose.set('useCreateIndex', true);
+
 //mongoose.connect('mongodb://localhost/addresses', { useNewUrlParser: true });
 
 mongoose.connect(db)
