@@ -1,4 +1,6 @@
-const User = require('./../models/User');
+const path = require('path');
+const Address = require(__dirname + './../models/User');
+//const User = require('./../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const registerValidator = require('../validator/registerValidator');
