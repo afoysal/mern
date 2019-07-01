@@ -1,6 +1,4 @@
-//const Address = require('./../models/Address');
-const path = require('path');
-const Address = require(__dirname + './../models/Address');
+const Address = require('../models/Address');
 const multer = require('multer');
 const fs = require('fs');
 const { serverError, resourceError } = require('../util/error');
