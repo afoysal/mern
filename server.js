@@ -13,7 +13,7 @@ mongoose.set('useCreateIndex', true);
 
 //mongoose.connect('mongodb://localhost/addresses', { useNewUrlParser: true });
 
-mongoose.connect(db)
+mongoose.connect(db, { useNewUrlParser: true, useFindAndModify: false })
     .then(() => console.log('MongoDB Connected....'))
     .catch((err) => console.log(err));
 

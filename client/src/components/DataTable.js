@@ -112,11 +112,7 @@ class DataTable extends Component {
       var modalComponent;
       if (this.state.addressOject) {
         modalComponent = (
-          <ModalBody
-            address={this.props.getAddress}
-            action={() => this.changestate()}
-            modelStatus={this.state.modalOpen}
-            addresObj={this.state.addressOject}
+          <ModalBody address={this.props.getAddress} action={() => this.changestate()} modelStatus={this.state.modalOpen} addresObj={this.state.addressOject}
           />
         );
       }
@@ -126,84 +122,157 @@ class DataTable extends Component {
     }
 
       return (
-
         <div className="data_table">
-
-        <h1 className="ui attached warning message table">
-          <span id="address">Addresses</span>
-          <span id="user_details">
-            Welcome,  <b> { this.state.userName } </b>  |
-            <span id="logout" onClick={this.logout}> Logout </span>
-            <button className="ui teal button" onClick={this.openPopup}> <i className="plus square icon" />
-              Add Address
-            </button>
-          </span>
-        </h1>
-        {this.props.addresses.length > 0 ? (
-          <div>
-            <table className="ui attached compact celled striped selectable table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Address</th>
-                  <th>Telephone No</th>
-                  <th>Email</th>
-                  <th className="extra" />
-                </tr>
-              </thead>
-              <tbody>{rows}</tbody>
-            </table>
-            <div className="ui pagination menu">
-              <span
-                className={
-                  this.props.page === 1
-                    ? 'disabled item pagination'
-                    : 'item pagination'
-                }
-                onClick={() => {
-                  if (this.props.page === 1) {
-                    return false;
-                  }
-                  this.pagination(this.props.page - 1);
-                }}
-              >
-                ❮
-              </span>
-              <div className="item">
-                Page {this.props.page} of {this.props.maxPages}
-              </div>
-              <span
-                className={
-                  this.props.page === this.props.maxPages
-                    ? 'disabled item pagination'
-                    : 'item pagination'
-                }
-                onClick={() => {
-                  if (this.props.page === this.props.maxPages) {
-                    return false;
-                  }
-                  this.pagination(this.props.page+1);
-                }}
-              >
-                ❯
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div className="ui attached compact center aligned segment big">
-            <div className="new_address">You dont't have any Address</div>
-            <div>
-              <button
-                className="ui teal button"
-                onClick={this.openPopup}
-              >
-                <i className="plus square icon" />
+          <h1 className="ui attached warning message table">
+            <span id="address">Addresses</span>
+            <span id="user_details">
+              Welcome,  <b> { this.state.userName } </b>  |
+              <span id="logout" onClick={this.logout}> Logout </span>
+              <button className="ui teal button" onClick={this.openPopup}> <i className="plus square icon" />
                 Add Address
               </button>
+            </span>
+          </h1>
+          {this.props.addresses.length > 0 ? (
+            <div>
+              <table className="ui attached compact celled striped selectable table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Telephone No</th>
+                    <th>Email</th>
+                    <th className="extra" />
+                  </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+              </table>
+              <div className="ui pagination menu">
+                <span
+                  className={
+                    this.props.page === 1
+                      ? 'disabled item pagination'
+                      : 'item pagination'
+                  }
+                  onClick={() => {
+                    if (this.props.page === 1) {
+                      return false;
+                    }
+                    this.pagination(this.props.page - 1);
+                  }}
+                >
+                  ❮
+                </span>
+                <div className="item">
+                  Page {this.props.page} of {this.props.maxPages}
+                </div>
+                <span
+                  className={
+                    this.props.page === this.props.maxPages
+                      ? 'disabled item pagination'
+                      : 'item pagination'
+                  }
+                  onClick={() => {
+                    if (this.props.page === this.props.maxPages) {
+                      return false;
+                    }
+                    this.pagination(this.props.page+1); 
+                                       
+                    <h1 className="ui attached warning message table">
+                      <span id="address">Addresses</span>
+                      <span id="user_details">
+                        Welcome,  <b> { this.state.userName } </b>  |
+                        <span id="logout" onClick={this.logout}> Logout </span>
+                        <button className="ui teal button" onClick={this.openPopup}> <i className="plus square icon" />
+                          Add Address
+                        </button>
+                      </span>
+                    </h1>
+                  {this.props.addresses.length > 0 ? (
+                    <div>
+                      <table className="ui attached compact celled striped selectable table">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Telephone No</th>
+                            <th>Email</th>
+                            <th className="extra" />
+                          </tr>
+                        </thead>
+                        <tbody>{rows}</tbody>
+                      </table>
+                      <div className="ui pagination menu">
+                        <span
+                          className={
+                            this.props.page === 1
+                              ? 'disabled item pagination'
+                              : 'item pagination'
+                          }
+                          onClick={() => {
+                            if (this.props.page === 1) {
+                              return false;
+                            }
+                            this.pagination(this.props.page - 1);
+                          }}
+                        >
+                          ❮
+                        </span>
+                        <div className="item">
+                          Page {this.props.page} of {this.props.maxPages}
+                        </div>
+                        <span
+                          className={
+                            this.props.page === this.props.maxPages
+                              ? 'disabled item pagination'
+                              : 'item pagination'
+                          }
+                          onClick={() => {
+                            if (this.props.page === this.props.maxPages) {
+                              return false;
+                            }
+                            this.pagination(this.props.page+1);
+                          }}
+                        >
+                          ❯
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="ui attached compact center aligned segment big">
+                      <div className="new_address">You dont't have any Address</div>
+                      <div>
+                        <button
+                          className="ui teal button"
+                          onClick={this.openPopup}
+                        >
+                          <i className="plus square icon" />
+                          Add Address
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {modalComponent} }}
+                >
+                  ❯
+                </span>
+              </div>
             </div>
-          </div>
-        )}
-        {modalComponent}
+          ) : (
+            <div className="ui attached compact center aligned segment big">
+              <div className="new_address">You dont't have any Address</div>
+              <div>
+                <button
+                  className="ui teal button"
+                  onClick={this.openPopup}
+                >
+                  <i className="plus square icon" />
+                  Add Address
+                </button>
+              </div>
+            </div>
+          )}
+          {modalComponent}
         </div>
     );
   }

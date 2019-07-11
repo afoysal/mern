@@ -77,8 +77,7 @@ class ModalElement extends Component {
     }
   };
 
-  componentDidMount = () => {
-    this.setState({ photo_file: '' });
+  componentDidMount ()  {
     if (this.props.element !== undefined) {
       // for view record
       this.setState({ photostatus: 'image', addressID: this.props.element._id });
@@ -92,6 +91,9 @@ class ModalElement extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    if(prevState.photo_file !== '') {
+      return ({ photostatus: 'input', photo_file: '' })
+    }
     if (nextProps.uploadImage !== undefined) {
       if (nextProps.uploadImage.file !== undefined) {
         return ({ photostatus: 'image', photo_file: nextProps.uploadImage.file, errors: nextProps.erroraddAddress })
@@ -126,6 +128,7 @@ class ModalElement extends Component {
     }
 
     if (this.state.photostatus === 'image') {
+      var url = (window.location.href).replace('/dashboard','');
       if (this.props.element) {
         return (image_elements = (
           <div className="image_container">
@@ -133,9 +136,9 @@ class ModalElement extends Component {
               Edit
             </span>
               { this.state.photo_file ?
-                <img alt="Address" src={ 'http://localhost:4000/uploads/' + this.state.photo_file } height="250" width="250"/>
+                <img alt="Address" src={ url + '/uploads/' + this.state.photo_file } height="250" width="250"/>
               :
-                <img alt="Address" src={ 'http://localhost:4000/uploads/' + this.props.element.image } height="250" width="250"/>
+                <img alt="Address" src={ url + '/uploads/' + this.props.element.image } height="250" width="250"/>
               }
           </div>
         ));
@@ -145,7 +148,7 @@ class ModalElement extends Component {
             <span id="cancle_button_view" className="edit" onClick={() => { this.cancle_photo(this.props.uploadImage.file);}}>
               Edit
             </span>
-            <img alt="Address" src={ 'http://localhost:4000/uploads/' + this.props.uploadImage.file } height="250" width="250"/>
+            <img alt="Address" src={ url + '/uploads/' + this.props.uploadImage.file } height="250" width="250"/>
           </div>
         ));
       }
@@ -157,6 +160,7 @@ class ModalElement extends Component {
   };
 
   render() {
+
     if (this.props.errors) {
       var errors = this.props.errors;
     }

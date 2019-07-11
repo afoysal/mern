@@ -45,11 +45,11 @@ const VisitorOnlyRoute = ({ component: Component }) => (
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <Switch>
-				<VisitorOnlyRoute exact path="/" component={Login} />
-				<VisitorOnlyRoute exact path="/register" component={Register} />
-        <PrivateRoute path="/dashboard" exact component={Dashboard} />
-      </Switch>
+		<Switch>
+			<VisitorOnlyRoute exact path="/" component={Login} />
+			<VisitorOnlyRoute exact path="/register" component={Register} />
+			<PrivateRoute path="/dashboard" exact component={Dashboard} />
+		</Switch>
     </Router>
   </Provider>,
   document.getElementById('root')

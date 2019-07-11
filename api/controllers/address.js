@@ -2,6 +2,7 @@ const Address = require('../models/Address');
 const multer = require('multer');
 const fs = require('fs');
 const { serverError, resourceError } = require('../util/error');
+var path = require('path');
 
 const getAllAddress = (req, res, next) => {
     var perPage = 10;
@@ -179,13 +180,12 @@ const uploadImage = (req, res, next) => {
 const cancleImage = ( req, res, next ) => {
     let fileName = req.params.image_name;
     let user_id = req.params.id;
-
     fs.unlink(path.join('uploads/' + fileName), err => {
         if (err) {
             //console.log(err);
             res.send({ status: 200 });
         } else {
-            if (user_id) {
+            if (user_id !== undefined) {
                 let image = { image: '' };
                 Address.findByIdAndUpdate(user_id, { $set: image })
                 .then( () => {

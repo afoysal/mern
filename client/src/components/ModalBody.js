@@ -22,9 +22,9 @@ class ModalBody extends Component {
 
     if (this.state.name === '') {
       this.setState({ errors: 'Atleast Name is required' });
-      return false;
+      //return false;
     }
-
+    
     if (!(this.state.email).match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
       this.setState({ errors: 'Please enter a valid Email' });
       return false;

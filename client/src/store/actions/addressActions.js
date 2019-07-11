@@ -67,9 +67,9 @@ export const openModal = value => dispatch => {
   });
 };
 
-export const deleteImage = (image_name) => dispatch => {
+export const deleteImage = (image_name,user_id) => dispatch => {
   if (image_name) {
-    return Axios.post('/api/address/cancle_image/' + image_name)
+    return Axios.post('/api/address/cancle_image/' + image_name + '/'+ user_id)
     .then(response => {
       dispatch({
         type: 'deleteImage',
@@ -77,7 +77,7 @@ export const deleteImage = (image_name) => dispatch => {
       });
     })
     .catch(
-      error => { console.log(error) }
+      error => { console.log('Err:' + error) }
     );
   }
 };
