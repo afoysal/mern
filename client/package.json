@@ -12,7 +12,7 @@
     "react-dom": "^16.8.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
+    "react-scripts": "5.0.1",
     "react-smart-data-table": "^0.5.3",
     "react-table": "^6.8.2",
     "semantic-ui-react": "^0.79.1",
